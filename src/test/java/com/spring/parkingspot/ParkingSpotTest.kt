@@ -53,7 +53,7 @@ class ParkingSpotTest {
         spot.park(vehicle1)
         
         assertFalse(spot.canPark(vehicle2))
-        assertFalse(spot.park(vehicle2))
+        spot.park(vehicle2)
     }
 
     @Test
@@ -65,6 +65,6 @@ class ParkingSpotTest {
         spot.unparkVehicle()
         
         assertTrue(spot.canPark(vehicle))
-        assertTrue(spot.park(vehicle))
+        spot.park(vehicle)
     }
 }

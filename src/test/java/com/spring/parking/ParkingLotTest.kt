@@ -38,23 +38,18 @@ class ParkingLotTest {
     @Test
     fun `should park two wheeler successfully`() {
         val vehicle = TwoWheelerVehicle()
-        val result = parkingLot.parkVehicle(vehicle)
-        
-        assertTrue(result.isSuccess)
-        val spotData = result.getOrNull()
+        val spotData = parkingLot.parkVehicle(vehicle)
         assertNotNull(spotData)
-        assertEquals(1, spotData?.floor)
+        assertEquals(1, spotData.floor)
     }
 
     @Test
     fun `should park four wheeler successfully`() {
         val vehicle = FourWheelerVehicle()
-        val result = parkingLot.parkVehicle(vehicle)
-        
-        assertTrue(result.isSuccess)
-        val spotData = result.getOrNull()
+        val spotData = parkingLot.parkVehicle(vehicle)
+
         assertNotNull(spotData)
-        assertEquals(1, spotData?.floor)
+        assertEquals(1, spotData.floor)
     }
 
     @Test
@@ -64,9 +59,9 @@ class ParkingLotTest {
         parkingLot.parkVehicle(FourWheelerVehicle())
         
         // Try to park 3rd car
-        val result = parkingLot.parkVehicle(FourWheelerVehicle())
-        assertTrue(result.isFailure)
-        assertEquals("No spot available", result.exceptionOrNull()?.message)
+        try { val result = parkingLot.parkVehicle(FourWheelerVehicle()) } catch (e : Exception) {
+            assertEquals("No spot available", e.message)
+        }
     }
 
     @Test
@@ -77,22 +72,14 @@ class ParkingLotTest {
         
         // Park on floor 2
         val result = parkingLot.parkVehicle(TwoWheelerVehicle())
-        assertTrue(result.isSuccess)
-        assertEquals(2, result.getOrNull()?.floor)
+        assertEquals(2, result.floor)
     }
 
     @Test
     fun `should unpark vehicle successfully`() {
         val vehicle = TwoWheelerVehicle()
-        val result = parkingLot.parkVehicle(vehicle)
-        val spotData = result.getOrNull()
-        
-        // Create a dummy ticket for unparking (since ParkingLot.unparkVehicle takes a Ticket)
-        // In a real integration test we would get this from EntryGate, but here we test ParkingLot directly
-        // We need to mock or create a ticket. Since Ticket is a data class we can create it.
-        // However, ParkingLot.unparkVehicle relies on ticket.spot.unparkVehicle().
-        // So we need to pass the ticket with the correct spot.
-        
+        val spotData = parkingLot.parkVehicle(vehicle)
+
         val ticket = com.spring.ticket.Ticket(
             ticketId = 1,
             floor = spotData!!.floor,

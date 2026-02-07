@@ -38,7 +38,7 @@ class ExitGateTest {
         val vehicle = TwoWheelerVehicle()
         // Manually park to get a valid spot state
         val parkResult = parkingLot.parkVehicle(vehicle)
-        val spotData = parkResult.getOrNull()!!
+        val spotData = parkResult
         
         val ticket = Ticket(
             ticketId = 1,
