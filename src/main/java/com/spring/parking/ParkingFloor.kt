@@ -16,11 +16,8 @@ class ParkingFloor {
         return floor
     }
 
-    fun findAvailableSpot(vehicle: Vehicle): Result<ParkingSpot> {
+    fun findAvailableSpot(vehicle: Vehicle): ParkingSpot? {
         val spot = parkingSpots.find { it.canPark(vehicle) }
-        if(spot != null) {
-            return Result.success(value = spot)
-        }
-        return Result.failure(Exception("No spot available"))
+        return spot
     }
 }

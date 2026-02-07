@@ -6,26 +6,31 @@ import com.spring.vehicle.Vehicle
 
 class ParkingLot {
     private val floors: List<ParkingFloor>
+    private var ticketCounter = 0
 
     constructor(floors: List<ParkingFloor>) {
         this.floors = floors
     }
 
-    fun parkVehicle(vehicle: Vehicle): Result<ParkingSpotData> {
+    fun getNextTicketId() : Int {
+        ticketCounter += 1
+        return ticketCounter
+    }
+
+    fun parkVehicle(vehicle: Vehicle): ParkingSpotData {
         for (floor in floors) {
-            val spotResult = floor.findAvailableSpot(vehicle)
-            if (spotResult.isSuccess) {
-                val spot = spotResult.getOrNull()
-                if(spot == null) return Result.failure(Exception("No spot available"))
-                if (spot.park(vehicle)) {
-                    return Result.success(value = ParkingSpotData(parkingSpot = spot, floor = floor.getFloor()))
-                }
+            val spot = floor.findAvailableSpot(vehicle)
+            if(spot == null) {
+                continue
             }
+            spot.park(vehicle)
+            return ParkingSpotData(parkingSpot = spot, floor = floor.getFloor())
         }
-        return Result.failure(Exception("No spot available"))
+        throw Exception("No spot available")
     }
 
     fun unparkVehicle(ticket: Ticket): Ticket {
+        require(ticket.status == TicketStatus.ACTIVE) { "Ticket is not active" }
         ticket.spot.unparkVehicle()
         return ticket.copy(
             status = TicketStatus.CLOSED,

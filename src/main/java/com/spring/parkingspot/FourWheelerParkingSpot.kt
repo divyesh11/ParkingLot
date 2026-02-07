@@ -1,21 +1,13 @@
-package com.spring.parkingspot;
+package com.spring.parkingspot
 
-import com.spring.vehicle.VehicleType;
-import com.spring.vehicle.Vehicle;
-import org.jetbrains.annotations.NotNull;
+import com.spring.vehicle.Vehicle
+import com.spring.vehicle.VehicleType
 
-public class FourWheelerParkingSpot extends ParkingSpot {
+class FourWheelerParkingSpot : ParkingSpot {
+    constructor(spotId: Int) : super(spotId)
+    constructor(spotId: Int, parkingState: ParkingState) : super(spotId, parkingState)
 
-    public FourWheelerParkingSpot(int spotId) {
-        super(spotId);
-    }
-
-    public FourWheelerParkingSpot(int spotId, ParkingState parkingState) {
-        super(spotId, parkingState);
-    }
-
-    @Override
-    public boolean canFit(@NotNull Vehicle vehicle) {
-        return vehicle.getVehicleType() == VehicleType.FOUR_WHEELER;
+    override fun canFit(vehicle: Vehicle): Boolean {
+        return vehicle.getVehicleType() == VehicleType.FOUR_WHEELER
     }
 }

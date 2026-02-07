@@ -3,9 +3,9 @@ package com.spring.parkingspot
 import com.spring.vehicle.Vehicle
 
 abstract class ParkingSpot {
-    protected var spotId : Int
-    protected var vehicle : Vehicle? = null
-    protected var parkingState : ParkingState
+    private var spotId : Int
+    private var vehicle : Vehicle? = null
+    private var parkingState : ParkingState
 
     constructor(spotId : Int, parkingState: ParkingState) {
         this.spotId = spotId
@@ -19,7 +19,7 @@ abstract class ParkingSpot {
 
     abstract fun canFit(vehicle: Vehicle) : Boolean
 
-    open fun canPark(vehicle: Vehicle) : Boolean {
+    fun canPark(vehicle: Vehicle) : Boolean {
         if(this.parkingState == ParkingState.OCCUPIED) {
             return false
         }
@@ -29,14 +29,14 @@ abstract class ParkingSpot {
         return true
     }
 
-    fun park(vehicle: Vehicle) : Boolean {
-        if(!canPark(vehicle)) { return false }
+    fun park(vehicle: Vehicle) {
+        require(canPark(vehicle)) { "Cannot park vehicle" }
         this.vehicle = vehicle
         this.parkingState = ParkingState.OCCUPIED
-        return true
     }
 
     fun unparkVehicle() {
+        require(parkingState == ParkingState.OCCUPIED) { "Spot already free" }
         this.vehicle = null
         this.parkingState = ParkingState.FREE
     }
